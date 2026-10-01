@@ -11,16 +11,20 @@
         /* 타이틀 및 대가성 문구 영역 */
         .header-area { padding: 20px 20px 10px 20px; background: #ffffff; }
         
-        /* 🚨 [요청사항 반영] 제목 위에 들어가는 아주 작고 깔끔한 대가성 수수료 안내 문구 */
-        .notice-text { font-size: 11px; color: #a1a1a6; line-height: 1.4; margin-bottom: 12px; font-weight: 400; letter-spacing: -0.3px; }
+        /* 🚨 [요청사항 반영] 대가성 문구 가독성 줄바꿈 및 정렬 */
+        .notice-text { font-size: 11px; color: #a1a1a6; line-height: 1.5; margin-bottom: 15px; font-weight: 400; letter-spacing: -0.3px; }
         
         .title { font-size: 22px; font-weight: 800; color: #1d1d1f; margin: 0 0 5px 0; }
         .update-info { font-size: 12px; color: #86868b; margin: 0; }
 
-        /* 4가지 등급별 필터 탭 버튼 디자인 */
-        .filter-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 15px 20px; background: #ffffff; border-bottom: 1px solid #eef0f5; position: sticky; top: 0; z-index: 100; }
-        .filter-btn { background-color: #ffffff; color: #1d1d1f; border: 1px solid #e5e5e7; padding: 12px 2px; border-radius: 10px; font-size: 11px; font-weight: bold; cursor: pointer; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .filter-btn.active { background-color: #ffb300; color: #ffffff; border-color: #ffb300; } 
+        /* 📊 [요청사항 반영] 버튼 사이즈 확대 및 그리드 비율 조정 */
+        .filter-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 15px 20px; background: #ffffff; border-bottom: 1px solid #eef0f5; position: sticky; top: 0; z-index: 100; }
+        
+        /* 🚨 [요청사항 반영] 기본 버튼 글자 크기를 키우고 여백을 늘림 */
+        .filter-btn { background-color: #ffffff; color: #1d1d1f; border: 1px solid #e5e5e7; padding: 14px 2px; border-radius: 12px; font-size: 13px; font-weight: 800; cursor: pointer; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); line-height: 1.3; }
+        
+        /* 🚨 [요청사항 반영] 클릭 시 배경은 노란색으로 변하되 글자색은 무조건 진한 검은색 고정 */
+        .filter-btn.active { background-color: #ffcc00; color: #1d1d1f; border-color: #ffcc00; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05); } 
 
         /* 상품 리스트 가로 일렬 카드 레이아웃 */
         .product-list { padding: 15px 20px; display: flex; flex-direction: column; gap: 15px; }
@@ -56,20 +60,22 @@
 
 <div class="container">
     <div class="header-area">
-        <!-- 🚨 [요청사항 완벽 반영] 타이틀 바로 위에 배치한 수수료 문구 -->
+        <!-- 🚨 [요청사항 완벽 반영] 수수료 가독성 줄바꿈 및 정렬 정돈 -->
         <div class="notice-text">
-            * 이 게시물은 쿠팡파트너스, 토스쇼핑 쉐어링크 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다. 구매가격은 동일합니다.
+            * 이 게시물은 쿠팡파트너스, 토스쇼핑 쉐어링크 활동의 일환으로,<br>
+            이에 따른 일정액의 수수료를 제공받습니다.<br>
+            구매가격은 동일합니다.
         </div>
         <h1 class="title">방금 올라온 핫딜 🔥</h1>
         <p class="update-info">실시간 확인 · 매시간 최신 업데이트</p>
     </div>
 
-    <!-- 4가지 필터 탭 -->
+    <!-- 📊 [요청사항 반영] 글씨가 커지고 가독성이 대폭 향상된 버튼 그룹 -->
     <div class="filter-container">
-        <button class="filter-btn active" onclick="filterItems('openrun')">오픈런급<br>🔥🔥🔥🔥</button>
-        <button class="filter-btn" onclick="filterItems('s-plus')">S+급핫딜<br>🔥🔥🔥</button>
-        <button class="filter-btn" onclick="filterItems('s-grade')">S급핫딜<br>🔥🔥</button>
-        <button class="filter-btn" onclick="filterItems('oasis')">오아시스&추천<br>🥬</button>
+        <button class="filter-btn active" onclick="filterItems('openrun')">오픈런급<br>🔥🔥</button>
+        <button class="filter-btn" onclick="filterItems('s-plus')">S+급핫딜<br>🔥🔥</button>
+        <button class="filter-btn" onclick="filterItems('s-grade')">S급핫딜<br>🔥</button>
+        <button class="filter-btn" onclick="filterItems('oasis')">오아시스<br>🥬</button>
     </div>
 
     <!-- 상품 리스트 구역 (여기에 상품을 무제한 누적 추가하시면 됩니다) -->
