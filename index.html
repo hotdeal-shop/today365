@@ -6,95 +6,142 @@
     <title>핫딜 실시간 특가몰</title>
     <style>
         /* 기본 스타일 및 초기화 */
-        body { font-family: 'Apple SD Gothic Neo', -apple-system, sans-serif; background-color: #f5f5f7; margin: 0; padding: 0; color: #333; }
-        .container { max-width: 500px; margin: 0 auto; background: #ffffff; min-height: 100vh; padding-bottom: 50px; box-shadow: 0 0 15px rgba(0,0,0,0.05); }
+        body { font-family: 'Apple SD Gothic Neo', -apple-system, sans-serif; background-color: #f5f5f7; margin: 0; padding: 0; color: #333; padding-bottom: 90px; /* 하단 카톡 버튼 공간 확보 */ }
+        
+        /* PC에서는 4개가 들어가야 하므로 넓이를 늘립니다 (최대 1000px) */
+        .container { max-width: 1000px; margin: 0 auto; background: #ffffff; min-height: 100vh; box-shadow: 0 0 15px rgba(0,0,0,0.05); }
+        
+        /* 1. 최상단 대가성 문구 */
+        .disclosure { text-align: center; font-size: 11px; color: #666; padding: 10px; background: #fafafa; border-bottom: 2px solid #ff3b30; word-break: keep-all; }
         
         /* 상단 퀵 링크 버튼 */
-        .quick-links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; background: #f9fafb; border-bottom: 1px solid #eee; }
-        .btn-quick { padding: 12px; text-align: center; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none; color: #111; display: flex; align-items: center; justify-content: center; gap: 5px; }
-        .btn-gold { background: #ffdb4d; }
-        .btn-fresh { background: #d4f0d4; color: #00701a; }
+        .quick-links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; background: #ffffff; }
+        .btn-quick { padding: 12px; text-align: center; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none; color: #111; display: flex; align-items: center; justify-content: center; gap: 5px; border: 2px solid #111; }
+        .btn-gold { background: #ffdb4d; border-color: #ffdb4d; }
+        .btn-fresh { background: #e6f4ea; border-color: #e6f4ea; color: #137333; }
         
         /* 타임딜 타이머 바 */
-        .timer-bar { background: #3b82f6; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 15px; }
-        .timer-btn { background: white; color: #3b82f6; padding: 5px 12px; border-radius: 20px; font-size: 12px; text-decoration: none; }
+        .timer-bar { background: #3b82f6; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 15px; margin: 0 15px; border-radius: 8px; }
+        .timer-btn { background: white; color: #3b82f6; padding: 5px 12px; border-radius: 20px; font-size: 12px; text-decoration: none; font-weight: 800; }
         
         /* 검색창 */
-        .search-container { padding: 15px; background: white; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid #eee; }
-        .search-box { width: 100%; padding: 12px 15px; border: 1.5px solid #ff3b30; border-radius: 8px; font-size: 14px; box-sizing: border-box; outline: none; transition: border-color 0.2s; }
-        .search-box:focus { border-color: #d62828; }
-
+        .search-container { padding: 15px; background: white; position: sticky; top: 0; z-index: 10; }
+        .search-box { width: 100%; padding: 12px 15px; border: 1.5px solid #ff3b30; border-radius: 8px; font-size: 14px; box-sizing: border-box; outline: none; }
+        
         /* 카테고리 탭 */
         .tabs { display: flex; gap: 8px; padding: 0 15px 15px 15px; overflow-x: auto; background: white; border-bottom: 1px solid #f0f0f0; }
         .tabs::-webkit-scrollbar { display: none; }
         .tab-btn { padding: 8px 16px; border: 1px solid #ddd; border-radius: 20px; font-size: 13px; background: white; cursor: pointer; white-space: nowrap; font-weight: 500; }
         .tab-btn.active { background: #111; color: white; border-color: #111; }
 
-        /* 상품 그리드 */
-        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
-        .card { background: white; border: 1px solid #eee; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; position: relative; text-decoration: none; color: inherit; }
+        /* 2. 상품 그리드 (PC 4열, 모바일 2열 배치) */
+        .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 15px; }
         
-        /* 이미지 영역 */
+        /* 모바일 화면 (너비 768px 이하)일 때 2열로 자동 변경 */
+        @media (max-width: 768px) {
+            .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 10px; }
+        }
+
+        .card { background: white; border: 1px solid #eee; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
         .img-box { width: 100%; aspect-ratio: 1; background: #f9f9f9; position: relative; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* 배지 (최저가, 품절) */
         .badge-container { position: absolute; bottom: 8px; left: 8px; display: flex; gap: 5px; }
         .badge { padding: 4px 8px; font-size: 11px; font-weight: bold; color: white; border-radius: 4px; }
         .badge-low { background: #111; }
         .badge-soldout { background: rgba(0,0,0,0.6); }
         
-        /* 정보 영역 */
-        .info { padding: 12px; }
-        .platform-tag { display: inline-block; font-size: 10px; padding: 2px 6px; background: #f0f0f0; color: #666; border-radius: 4px; margin-bottom: 6px; }
+        .info { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; }
+        .platform-tag { display: inline-block; font-size: 10px; padding: 2px 6px; background: #f0f0f0; color: #666; border-radius: 4px; margin-bottom: 6px; align-self: flex-start; }
         .p-name { font-size: 13px; font-weight: 600; line-height: 1.4; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 36px; }
-        .price-row { display: flex; align-items: baseline; gap: 5px; margin-bottom: 10px; }
-        .p-discount { color: #ff3b30; font-weight: bold; font-size: 14px; }
-        .p-price { font-weight: 800; font-size: 15px; }
-        .btn-buy { background: #f3f4f6; color: #111; text-align: center; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: bold; display: block; border: none; width: 100%; cursor: pointer; }
-        .btn-buy:active { background: #e5e7eb; }
         
-        /* 품절 시 카드 스타일 처리 */
+        .p-retail { font-size: 11px; color: #999; text-decoration: line-through; margin-bottom: 2px; }
+        .price-row { display: flex; align-items: baseline; gap: 5px; margin-bottom: 12px; }
+        .p-discount { color: #ff3b30; font-weight: bold; font-size: 15px; }
+        .p-price { font-weight: 800; font-size: 16px; }
+        
+        /* 3. 구매 버튼 및 쿠팡 비교 링크 */
+        .btn-buy { background: #ff3b30; color: white; text-align: center; padding: 12px; border-radius: 6px; font-size: 14px; font-weight: bold; display: block; text-decoration: none; border: none; width: 100%; cursor: pointer; margin-top: auto; }
+        .btn-buy:active { background: #d62828; }
+        .btn-compare { display: block; text-align: center; font-size: 12px; color: #555; text-decoration: none; margin-top: 8px; font-weight: 500; }
+        .btn-compare:hover { text-decoration: underline; }
+        
         .card.sold-out .img-box img { opacity: 0.4; }
         .card.sold-out .btn-buy { background: #ddd; color: #888; cursor: not-allowed; }
         
         #empty-msg { text-align: center; padding: 40px 20px; color: #888; font-size: 14px; grid-column: 1 / -1; display: none; }
+
+        /* 4. 하단 고정 카톡 채팅방 버튼 */
+        .floating-chat { 
+            position: fixed; 
+            bottom: 20px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            width: 90%; 
+            max-width: 400px; 
+            background-color: #fee500; 
+            color: #181600; 
+            text-align: center; 
+            padding: 16px; 
+            border-radius: 50px; 
+            font-weight: 900; 
+            font-size: 15px; 
+            text-decoration: none; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+            z-index: 1000; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+        }
+        .floating-chat:active { transform: translateX(-50%) scale(0.98); }
     </style>
 </head>
 <body>
 
 <div class="container">
     
-    <!-- 1. 퀵 링크 버튼 (본인 제휴 링크로 변경) -->
+    <!-- 1. 최상단 대가성 문구 -->
+    <div class="disclosure">
+        📢 쿠팡, 토스, 무신사, 오늘의집, 네이버를 통한 구매시 수수료를 받습니다. 구매 가격은 동일합니다.
+    </div>
+
+    <!-- 퀵 링크 버튼 (본인 제휴 링크로 변경) -->
     <div class="quick-links">
         <a href="https://coupang.com" class="btn-quick btn-gold" target="_blank">🎁 골드박스 특가</a>
         <a href="https://coupang.com" class="btn-quick btn-fresh" target="_blank">🥬 오늘의 식재료</a>
     </div>
 
-    <!-- 2. 타임딜 타이머 -->
+    <!-- 타임딜 타이머 -->
     <div class="timer-bar">
         <div>토스 타임딜 <span id="countdown">00:00:00</span></div>
         <a href="https://toss.im" class="timer-btn" target="_blank">특가 보러가기 ↗</a>
     </div>
+    <br>
 
-    <!-- 3. 검색창 -->
+    <!-- 검색창 -->
     <div class="search-container">
         <input type="text" id="searchInput" class="search-box" placeholder="🔍 상품명이나 단어 일부로 검색">
     </div>
 
-    <!-- 4. 카테고리 탭 -->
+    <!-- 카테고리 탭 -->
     <div class="tabs" id="categoryTabs">
         <button class="tab-btn active" data-category="전체">전체</button>
         <button class="tab-btn" data-category="토스">토스</button>
         <button class="tab-btn" data-category="쿠팡">쿠팡</button>
     </div>
 
-    <!-- 5. 상품이 표시될 공간 (JS가 여기에 상품을 그려넣습니다) -->
+    <!-- 상품이 표시될 공간 (JS가 여기에 상품을 그려넣습니다) -->
     <div class="product-grid" id="productGrid">
         <div id="empty-msg">검색 결과가 없습니다.</div>
     </div>
 
 </div>
+
+<!-- 4. 하단 고정 카카오톡 오픈채팅방 버튼 (본인 톡방 링크로 변경) -->
+<a href="https://open.kakao.com/..." class="floating-chat" target="_blank">
+    💬 실시간 1분 품절 핫딜 알림방 입장하기
+</a>
 
 <!-- ========================================== -->
 <!-- 👇 매일 여기부터 수정하세요 (상품 데이터 관리) 👇 -->
@@ -103,43 +150,51 @@
     const products = [
         {
             name: "이롬 국내산 약콩 무가당 두유 190ml 16개",
-            platform: "토스",            // 탭 분류용 (토스 또는 쿠팡)
-            price: "9,900",              // 실제 판매가
-            discount: "35",              // 할인율 숫자만 (없으면 비워두기 "")
-            badgeText: "기록상 최저가",  // 배지 글자 (없으면 비워두기 "")
+            platform: "토스",            
+            retailPrice: "16,800",       // 정가 (취소선 표시됨)
+            price: "4,990",              // 실제 판매가
+            discount: "70",              // 할인율 숫자만
+            badgeText: "기록상 최저가",  
             isSoldOut: false,            // 품절이면 true 로 변경
             image: "https://via.placeholder.com/300/f5f5f5/888?text=상품이미지1",
-            link: "https://toss.im"      // 본인 수익 링크
+            mainLink: "https://toss.im", // 메인 빨간 버튼 링크 (주로 토스)
+            compareLink: "https://coupang.com" // 아래 텍스트 비교 링크 (주로 쿠팡)
         },
         {
             name: "예진원 국내산 ABC주스 80ml 35개",
             platform: "토스",
-            price: "15,500",
-            discount: "50",
+            retailPrice: "19,900",
+            price: "5,990",
+            discount: "70",
             badgeText: "기록상 최저가",
             isSoldOut: false,
             image: "https://via.placeholder.com/300/f5f5f5/888?text=상품이미지2",
-            link: "https://toss.im"
+            mainLink: "https://toss.im",
+            compareLink: "https://coupang.com"
         },
         {
-            name: "스파클 생수 무라벨 2L 24개",
-            platform: "쿠팡",
-            price: "7,400",
-            discount: "63",
-            badgeText: "로켓배송",
+            name: "한우물 햄야채 볶음밥 210g 10개",
+            platform: "토스",
+            retailPrice: "26,000",
+            price: "9,990",
+            discount: "62",
+            badgeText: "기록상 최저가",
             isSoldOut: false,
             image: "https://via.placeholder.com/300/f5f5f5/888?text=상품이미지3",
-            link: "https://coupang.com"
+            mainLink: "https://toss.im",
+            compareLink: "https://coupang.com"
         },
         {
             name: "슬림떡볶이 로제맛 230g 4개",
             platform: "토스",
-            price: "11,200",
-            discount: "20",
+            retailPrice: "15,600",
+            price: "5,530",
+            discount: "65",
             badgeText: "",
-            isSoldOut: true,            // 품절 처리 예시
+            isSoldOut: true, // 품절 상태 예시
             image: "https://via.placeholder.com/300/f5f5f5/888?text=상품이미지4",
-            link: "https://toss.im"
+            mainLink: "https://toss.im",
+            compareLink: "https://coupang.com"
         }
     ];
 
@@ -152,36 +207,32 @@
     let currentCategory = '전체';
     let currentSearch = '';
 
-    // 화면에 상품 카드를 그리는 함수
+    // 오늘 날짜 구하기 (2026.10.02 가격 확인 문구용)
+    const today = new Date();
+    const dateString = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
+
     function renderProducts() {
-        // 기존 내용 지우기
         const cards = grid.querySelectorAll('.card');
         cards.forEach(card => card.remove());
 
-        // 필터링 적용 (탭 + 검색어)
         const filtered = products.filter(p => {
             const matchCategory = currentCategory === '전체' || p.platform === currentCategory;
             const matchSearch = p.name.replace(/\s+/g, '').includes(currentSearch.replace(/\s+/g, ''));
             return matchCategory && matchSearch;
         });
 
-        // 결과 없음 처리
         emptyMsg.style.display = filtered.length === 0 ? 'block' : 'none';
 
-        // 필터링된 상품 추가
         filtered.forEach(p => {
-            const card = document.createElement('a');
-            card.href = p.link;
-            card.target = '_blank';
+            const card = document.createElement('div');
             card.className = `card ${p.isSoldOut ? 'sold-out' : ''}`;
 
-            // 배지 HTML 생성
             let badgesHtml = '';
             if(p.badgeText) badgesHtml += `<span class="badge badge-low">${p.badgeText}</span>`;
             if(p.isSoldOut) badgesHtml += `<span class="badge badge-soldout">품절</span>`;
 
-            // 할인율 HTML 생성
             let discountHtml = p.discount ? `<span class="p-discount">${p.discount}%</span>` : '';
+            let retailHtml = p.retailPrice ? `<div class="p-retail">정상가 ${p.retailPrice}원</div>` : '';
 
             card.innerHTML = `
                 <div class="img-box">
@@ -191,20 +242,25 @@
                 <div class="info">
                     <span class="platform-tag">${p.platform}</span>
                     <div class="p-name">${p.name}</div>
+                    ${retailHtml}
                     <div class="price-row">
                         ${discountHtml}
                         <span class="p-price">${p.price}원</span>
                     </div>
-                    <button class="btn-buy" ${p.isSoldOut ? 'disabled' : ''}>
-                        ${p.platform}에서 확인 ➔
+                    <div style="font-size: 10px; color: #888; margin-bottom: 10px;">${dateString} 가격 확인</div>
+                    
+                    <button class="btn-buy" ${p.isSoldOut ? 'disabled' : ''} onclick="window.open('${p.mainLink}', '_blank')">
+                        최저가 구매 ↗
                     </button>
+                    <a href="${p.compareLink}" class="btn-compare" target="_blank">
+                        쿠팡에서 보기 ⇲
+                    </a>
                 </div>
             `;
             grid.appendChild(card);
         });
     }
 
-    // 탭 클릭 이벤트 설정
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -214,13 +270,11 @@
         });
     });
 
-    // 검색어 입력 이벤트 설정 (실시간 필터링)
     document.getElementById('searchInput').addEventListener('input', (e) => {
         currentSearch = e.target.value;
         renderProducts();
     });
 
-    // 카운트다운 타이머 로직 (매일 자정 기준 리셋)
     function updateTimer() {
         const now = new Date();
         const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
@@ -233,7 +287,6 @@
         document.getElementById('countdown').innerText = `${h}:${m}:${s}`;
     }
     
-    // 초기 실행
     setInterval(updateTimer, 1000);
     updateTimer();
     renderProducts();
