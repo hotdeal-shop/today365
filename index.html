@@ -463,37 +463,22 @@
                     filters[type] = val;
                 }
             }
-            renderNoChinaProducts();
-        });
-    });
+          <!-- 수정된 NO 중국산 배너 (클릭 시 /deallog 페이지로 이동) -->
+    <a href="/deallog" style="display: block; margin: 15px; text-decoration: none;">
+        <div style="background-color: #fff0f0; border: 2px solid #ff3b30; border-radius: 12px; padding: 15px 10px; display: flex; align-items: center; justify-content: space-between; position: relative;">
+            <!-- ... (내용 동일) ... -->
+            <div style="font-size: 28px; position: relative; line-height: 1;">
+                🇨🇳 <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 34px; color: #ff3b30; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">❌</span>
+            </div>
+            
+            <div style="text-align: center; color: #111; flex-grow: 1; padding: 0 10px;">
+                <div style="font-size: 12px; color: #666; margin-bottom: 3px;">원산지 확인하느라 힘드셨죠?</div>
+                <div style="font-size: 12px; color: #666; margin-bottom: 8px;">여러분의 시간과 수고스러움을 덜 수 있도록,</div>
+                <div style="font-weight: 800; font-size: 15px; color: #d62828;">중국산 원재료가 없는 제품모음 바로가기 ➔</div>
+            </div>
 
-    // --- 상세 팝업창(중프리 스타일) 로직 ---
-    function openDetailModal(index) {
-        const p = currentNoChinaFiltered[index];
-        if(!p || p.isSoldOut) return;
-        
-        document.getElementById('detailModalTitle').innerText = p.name;
-        document.getElementById('detailModalGoBtn').href = p.mainLink;
-        document.getElementById('detailModalOriginText').innerText = p.originText;
-        document.getElementById('detailModalImage').src = p.detailImage ? p.detailImage : p.image;
-        
-        document.getElementById('detailModal').style.display = 'flex';
-    }
-    function closeDetailModal() { document.getElementById('detailModal').style.display = 'none'; }
-
-
-    function updateTimer() {
-        const now = new Date();
-        const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-        const diff = tomorrow - now;
-        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
-        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
-        const s = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
-        document.getElementById('countdown').innerText = `${h}:${m}:${s}`;
-    }
-    setInterval(updateTimer, 1000);
-    updateTimer();
-    renderMainProducts();
-</script>
-</body>
-</html>
+            <div style="font-size: 28px; position: relative; line-height: 1;">
+                🇨🇳 <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 34px; color: #ff3b30; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">❌</span>
+            </div>
+        </div>
+    </a>
