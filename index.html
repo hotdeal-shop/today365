@@ -5,24 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>핫딜 실시간 특가몰</title>
     <style>
-        /* 기본 스타일 */
+        /* ========================================= */
+        /* 기본 레이아웃 & 메인 페이지 스타일 */
+        /* ========================================= */
         body { font-family: 'Apple SD Gothic Neo', -apple-system, sans-serif; background-color: #f5f5f7; margin: 0; padding: 0; color: #333; padding-bottom: 90px; }
         .container { max-width: 1000px; margin: 0 auto; background: #ffffff; min-height: 100vh; box-shadow: 0 0 15px rgba(0,0,0,0.05); }
-        
-        /* 최상단 대가성 문구 */
         .disclosure { text-align: center; font-size: 11px; color: #666; padding: 10px; background: #fafafa; border-bottom: 2px solid #ff3b30; word-break: keep-all; }
         
-        /* 퀵 링크 버튼 */
+        /* 퀵 링크 & 타이머 */
         .quick-links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 15px 15px 15px; background: #ffffff; }
         .btn-quick { padding: 12px; text-align: center; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none; color: #111; display: flex; align-items: center; justify-content: center; gap: 5px; border: 2px solid #111; }
         .btn-gold { background: #ffdb4d; border-color: #ffdb4d; }
         .btn-fresh { background: #e6f4ea; border-color: #e6f4ea; color: #137333; }
-        
-        /* 타이머 바 */
         .timer-bar { background: #3b82f6; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 15px; margin: 0 15px; border-radius: 8px; }
         .timer-btn { background: white; color: #3b82f6; padding: 5px 12px; border-radius: 20px; font-size: 12px; text-decoration: none; font-weight: 800; }
         
-        /* 메인화면 검색 및 탭 */
+        /* 메인 검색 & 탭 */
         .search-container { padding: 15px; background: white; position: sticky; top: 0; z-index: 10; }
         .search-box { width: 100%; padding: 12px 15px; border: 1.5px solid #ff3b30; border-radius: 8px; font-size: 14px; box-sizing: border-box; outline: none; }
         .tabs { display: flex; gap: 8px; padding: 0 15px 15px 15px; overflow-x: auto; background: white; border-bottom: 1px solid #f0f0f0; }
@@ -30,19 +28,18 @@
         .tab-btn { padding: 8px 16px; border: 1px solid #ddd; border-radius: 20px; font-size: 13px; background: white; cursor: pointer; white-space: nowrap; font-weight: 500; }
         .tab-btn.active { background: #111; color: white; border-color: #111; }
 
-        /* 공통 상품 그리드 */
+        /* 메인 상품 그리드 */
         .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 15px; }
         @media (max-width: 768px) { .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 10px; } }
-
+        
+        /* 공통 카드 스타일 */
         .card { background: white; border: 1px solid #eee; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; position: relative; text-decoration: none; color: inherit; }
         .img-box { width: 100%; aspect-ratio: 1; background: #f9f9f9; position: relative; cursor: pointer; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
-        
         .badge-container { position: absolute; bottom: 8px; left: 8px; display: flex; gap: 5px; }
         .badge { padding: 4px 8px; font-size: 11px; font-weight: bold; color: white; border-radius: 4px; }
         .badge-low { background: #111; }
         .badge-soldout { background: rgba(0,0,0,0.6); }
-        
         .info { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; }
         .platform-tag { display: inline-block; font-size: 10px; padding: 2px 6px; background: #f0f0f0; color: #666; border-radius: 4px; margin-bottom: 6px; align-self: flex-start; }
         .p-name { font-size: 13px; font-weight: 600; line-height: 1.4; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 36px; }
@@ -50,55 +47,82 @@
         .price-row { display: flex; align-items: baseline; gap: 5px; margin-bottom: 12px; }
         .p-discount { color: #ff3b30; font-weight: bold; font-size: 15px; }
         .p-price { font-weight: 800; font-size: 16px; }
-        
         .btn-buy { background: #ff3b30; color: white; text-align: center; padding: 12px; border-radius: 6px; font-size: 14px; font-weight: bold; display: block; text-decoration: none; border: none; width: 100%; cursor: pointer; margin-top: auto; }
         .btn-buy:active { background: #d62828; }
         .btn-compare { display: block; text-align: center; font-size: 12px; color: #555; text-decoration: none; margin-top: 8px; font-weight: 500; }
-        
         .card.sold-out .img-box img { opacity: 0.4; }
         .card.sold-out .btn-buy { background: #ddd; color: #888; cursor: not-allowed; }
         .empty-msg { text-align: center; padding: 40px 20px; color: #888; font-size: 14px; grid-column: 1 / -1; display: none; }
 
-        /* 하단 고정 카톡 버튼 */
         .floating-chat { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background-color: #fee500; color: #181600; text-align: center; padding: 16px; border-radius: 50px; font-weight: 900; font-size: 15px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 1000; }
 
-        /* 🔥 1. NO중국산 전체상품 모달 (joongfree 스타일) 🔥 */
+        /* ========================================= */
+        /* 🔥 1. NO중국산 전체상품 모달 (중프리 필터 스타일) */
+        /* ========================================= */
         .search-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: center; justify-content: center; }
-        .search-modal-content { background: #f5f5f7; width: 95%; max-width: 1000px; height: 90vh; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+        .search-modal-content { background: #f9f9fb; width: 95%; max-width: 1200px; height: 90vh; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
         
-        /* 모달 상단 헤더 */
         .sm-header { background: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; }
-        .sm-title { font-size: 18px; font-weight: 900; color: #d62828; }
+        .sm-title { font-size: 18px; font-weight: 900; color: #111; }
         .sm-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #333; }
         
-        /* 모달 레이아웃 (왼쪽 카테고리 + 오른쪽 상품) */
         .sm-body { display: flex; flex-grow: 1; overflow: hidden; }
         
-        /* 왼쪽 사이드바 (카테고리) */
-        .sm-sidebar { width: 140px; background: white; border-right: 1px solid #eee; overflow-y: auto; flex-shrink: 0; }
-        .sm-cat-btn { display: block; width: 100%; text-align: left; padding: 15px; background: none; border: none; border-bottom: 1px solid #f9f9f9; font-size: 14px; color: #555; cursor: pointer; font-weight: 500; }
-        .sm-cat-btn.active { color: #ff3b30; font-weight: bold; background: #fff4f4; border-right: 3px solid #ff3b30; }
+        /* 💡 중프리 스타일 사이드바 (체크박스 필터) */
+        .sm-sidebar { width: 220px; background: #fbfbfc; border-right: 1px solid #eee; overflow-y: auto; flex-shrink: 0; padding: 20px; }
         
-        /* 오른쪽 상품 목록 영역 */
-        .sm-main { flex-grow: 1; overflow-y: auto; padding-bottom: 20px; }
+        .filter-group { margin-bottom: 30px; }
+        .filter-title { font-size: 15px; font-weight: bold; margin-bottom: 15px; color: #111; border-bottom: 2px solid #333; padding-bottom: 8px; display: inline-block;}
         
-        /* 모바일 대응 (모달창 안에서 카테고리를 가로로) */
+        /* 체크박스 스타일 버튼 */
+        .sm-cat-btn { display: flex; align-items: center; width: 100%; text-align: left; padding: 8px 0; background: none; border: none; font-size: 14px; color: #444; cursor: pointer; font-weight: 500; }
+        .sm-cat-btn::before { content: ''; display: inline-block; width: 18px; height: 18px; border: 1.5px solid #ccc; border-radius: 50%; margin-right: 10px; background-color: white; flex-shrink: 0; }
+        .sm-cat-btn.active { color: #111; font-weight: bold; }
+        /* 체크되었을 때의 녹색 체크 표시 */
+        .sm-cat-btn.active::before { background-color: #22c55e; border-color: #22c55e; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E"); background-size: 12px; background-position: center; background-repeat: no-repeat; }
+
+        .sm-main { flex-grow: 1; overflow-y: auto; padding: 10px; background: white; }
+        
         @media (max-width: 768px) {
             .sm-body { flex-direction: column; }
-            .sm-sidebar { width: 100%; display: flex; overflow-x: auto; border-right: none; border-bottom: 1px solid #eee; }
-            .sm-sidebar::-webkit-scrollbar { display: none; }
-            .sm-cat-btn { width: auto; white-space: nowrap; border-bottom: none; border-right: 1px solid #f9f9f9; text-align: center; }
-            .sm-cat-btn.active { border-right: 1px solid #f9f9f9; border-bottom: 3px solid #ff3b30; }
+            .sm-sidebar { width: 100%; display: flex; flex-wrap: wrap; gap: 15px; border-right: none; border-bottom: 1px solid #eee; padding: 15px; max-height: 200px; }
+            .filter-group { margin-bottom: 0; width: 100%; }
+            .filter-title { margin-bottom: 10px; border-bottom: 1px solid #eee; display: block; }
+            .filter-items { display: flex; flex-wrap: wrap; gap: 10px; }
+            .sm-cat-btn { width: auto; padding: 5px 10px; background: #fff; border: 1px solid #ddd; border-radius: 20px; }
+            .sm-cat-btn::before { display: none; } /* 모바일에서는 체크 동그라미 숨김 */
+            .sm-cat-btn.active { background: #22c55e; color: white; border-color: #22c55e; }
         }
 
-        /* 🔥 2. 상세 이미지 팝업 모달 (원산지/성분용) 🔥 */
-        .detail-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 3000; display: none; align-items: center; justify-content: center; }
-        .detail-modal-content { background: white; width: 90%; max-width: 400px; border-radius: 16px; padding: 25px 20px; position: relative; display: flex; flex-direction: column; }
-        .detail-modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; color: #999; }
-        .detail-modal-title { font-size: 16px; font-weight: bold; margin-bottom: 15px; line-height: 1.4; padding-right: 20px; }
-        .detail-modal-body { max-height: 50vh; overflow-y: auto; margin-bottom: 20px; border-radius: 8px; }
-        .detail-modal-body img { width: 100%; display: block; }
-        .detail-modal-btn-go { background: #3b82f6; color: white; text-align: center; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; text-decoration: none; display: block; }
+        /* ========================================= */
+        /* 🔥 2. 상세 성분/구매 팝업 (중프리 상세스타일) */
+        /* ========================================= */
+        .detail-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;}
+        .detail-modal-content { background: white; width: 100%; max-width: 500px; max-height: 90vh; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+        
+        /* 모달 상단 (X버튼과 타이틀) */
+        .dm-header { padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: flex-start; }
+        .dm-title { font-size: 16px; font-weight: bold; line-height: 1.4; padding-right: 20px; color: #111;}
+        .dm-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #999; padding: 0; line-height: 1;}
+        
+        /* 스크롤되는 본문 영역 */
+        .dm-body { overflow-y: auto; padding: 20px; flex-grow: 1; }
+        
+        /* 표 스타일 이미지 대체 공간 */
+        .dm-image-box { width: 100%; margin-bottom: 20px; border: 1px solid #eee; border-radius: 8px; overflow: hidden; }
+        .dm-image-box img { width: 100%; display: block; }
+
+        /* 하단 정보 (원산지, 구매버튼 등) */
+        .dm-info-section { margin-top: 10px; }
+        .dm-origin { font-size: 15px; color: #333; margin-bottom: 20px; font-weight: 500;}
+        .dm-origin strong { color: #22c55e; margin-right: 8px; }
+        
+        /* 💡 수정됨: 초록색 구매버튼 */
+        .dm-btn-buy { background: #22c55e; color: white; text-align: center; padding: 16px; border-radius: 8px; font-size: 16px; font-weight: bold; text-decoration: none; display: block; box-shadow: 0 4px 6px rgba(34, 197, 94, 0.2); }
+        .dm-btn-buy:active { background: #16a34a; }
+        
+        /* 💡 수정됨: 하단 대가성 문구 */
+        .dm-disclosure { text-align: center; font-size: 11px; color: #ef4444; margin-top: 15px; word-break: keep-all; }
     </style>
 </head>
 <body>
@@ -153,31 +177,52 @@
 
 <a href="https://open.kakao.com/..." class="floating-chat" target="_blank">💬 실시간 1분 품절 핫딜 알림방 입장하기</a>
 
+
 <!-- ========================================== -->
-<!-- 🔥 1. NO중국산 전용 검색 모달창 (joongfree 스타일) 🔥 -->
+<!-- 🔥 1. NO중국산 전용 검색 모달창 (중프리 필터 적용) 🔥 -->
 <!-- ========================================== -->
 <div id="searchModal" class="search-modal-overlay">
     <div class="search-modal-content">
-        <!-- 헤더 -->
         <div class="sm-header">
-            <div class="sm-title">🚫 NO 중국산 안심 특가</div>
+            <div class="sm-title">안심 특가 검색</div>
             <button class="sm-close" onclick="closeSearchModal()">✕</button>
         </div>
         
-        <!-- 바디 (사이드바 + 콘텐츠) -->
         <div class="sm-body">
+            <!-- 💡 수정됨: 세분화된 필터 사이드바 -->
             <div class="sm-sidebar" id="noChinaSidebar">
-                <!-- 업체인증 제외한 카테고리 -->
-                <button class="sm-cat-btn active" data-category="전체">전체보기</button>
-                <button class="sm-cat-btn" data-category="가공식품">가공식품</button>
-                <button class="sm-cat-btn" data-category="신선식품">신선/농축수산</button>
-                <button class="sm-cat-btn" data-category="생활용품">생활/주방</button>
-                <button class="sm-cat-btn" data-category="기타">기타용품</button>
+                
+                <div class="filter-group">
+                    <div class="filter-title">카테고리</div>
+                    <div class="filter-items">
+                        <button class="sm-cat-btn active" data-filter-type="category" data-value="전체">전체보기</button>
+                        <button class="sm-cat-btn" data-filter-type="category" data-value="베이커리/잼">베이커리/잼</button>
+                        <button class="sm-cat-btn" data-filter-type="category" data-value="간편식">간편식/냉동/냉장</button>
+                        <button class="sm-cat-btn" data-filter-type="category" data-value="과자/간식">과자/간식</button>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-title">첨가물</div>
+                    <div class="filter-items">
+                        <button class="sm-cat-btn" data-filter-type="additive" data-value="무첨가">무첨가 ⓘ</button>
+                        <button class="sm-cat-btn" data-filter-type="additive" data-value="저가공">저가공 ⓘ</button>
+                        <button class="sm-cat-btn" data-filter-type="additive" data-value="저당">저당 ⓘ</button>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-title">원산지</div>
+                    <div class="filter-items">
+                        <button class="sm-cat-btn" data-filter-type="origin" data-value="국산만">국산만 보기 ⓘ</button>
+                    </div>
+                </div>
+
             </div>
             
             <div class="sm-main">
                 <div class="product-grid" id="noChinaProductGrid">
-                    <div id="noChina-empty-msg" class="empty-msg">해당 카테고리에 상품이 없습니다.</div>
+                    <div id="noChina-empty-msg" class="empty-msg">조건에 맞는 상품이 없습니다.</div>
                 </div>
             </div>
         </div>
@@ -185,18 +230,41 @@
 </div>
 
 <!-- ========================================== -->
-<!-- 🔥 2. 원산지/성분 상세 이미지 모달창 🔥 -->
+<!-- 🔥 2. 상세 정보 팝업 (중프리 상세화면 스타일) 🔥 -->
 <!-- ========================================== -->
 <div id="detailModal" class="detail-modal-overlay" onclick="closeDetailModal(event)">
     <div class="detail-modal-content" onclick="event.stopPropagation()">
-        <button class="detail-modal-close" onclick="closeDetailModal()">✕</button>
-        <div id="detailModalTitle" class="detail-modal-title">상품명 위치</div>
-        <div class="detail-modal-body">
-            <img id="detailModalImage" src="" alt="상세정보">
+        
+        <div class="dm-header">
+            <div id="detailModalTitle" class="dm-title">상품명 위치</div>
+            <button class="dm-close" onclick="closeDetailModal()">✕</button>
         </div>
-        <a id="detailModalGoBtn" href="#" class="detail-modal-btn-go" target="_blank">🛒 안심하고 구매하기 ↗</a>
+        
+        <div class="dm-body">
+            <!-- 표 모양의 상세 정보 이미지 -->
+            <div class="dm-image-box">
+                <img id="detailModalImage" src="" alt="상세정보 표">
+            </div>
+            
+            <div class="dm-info-section">
+                <!-- 💡 원산지 텍스트 렌더링 영역 -->
+                <div class="dm-origin">
+                    <strong>원산지</strong> <span id="detailModalOriginText">국내산 / 캐나다산</span>
+                </div>
+                
+                <!-- 💡 구매버튼 (초록색) -->
+                <a id="detailModalGoBtn" href="#" class="dm-btn-buy" target="_blank">상품 구매하러 가기</a>
+                
+                <!-- 💡 대가성 문구 고정 -->
+                <div class="dm-disclosure">
+                    ※ 이 서비스는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
+
 
 <!-- ========================================== -->
 <!-- 👇 매일 여기부터 수정하세요 (상품 데이터 관리) 👇 -->
@@ -206,7 +274,7 @@
     const dateString = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
 
     // ==========================================
-    // 📦 1. 메인화면 일반 상품 (클릭 시 바로 구매링크 이동)
+    // 📦 1. 메인화면 일반 상품 
     // ==========================================
     const mainProducts = [
         {
@@ -224,22 +292,50 @@
     ];
 
     // ==========================================
-    // 📦 2. [NO 중국산] 전용 상품 (클릭 시 상세 모달창 뜸)
+    // 📦 2. [NO 중국산] 전용 상품 (필터 연동)
     // ==========================================
     const noChinaProducts = [
         {
-            name: "[NO중국산] 이롬 국내산 약콩 무가당 두유 190ml 16개",
-            category: "가공식품", // 전체, 가공식품, 신선식품, 생활용품, 기타 중 택1
+            name: "마이노멀 저당 저칼로리 블루베리잼 320g",
+            // 필터용 데이터 (위에서 만든 사이드바 항목과 텍스트가 일치해야 함)
+            category: "베이커리/잼", 
+            additive: "저당",       // 무첨가, 저가공, 저당 중 택1 (없으면 "")
+            isDomesticOnly: false,  // "국산만 보기"에 해당하면 true, 외국산 섞여있으면 false
+            
+            originText: "캐나다 (블루베리)", // 상세팝업 하단에 뜰 원산지 텍스트
+            
             platform: "토스",
             retailPrice: "16,800",
-            price: "4,990",
-            discount: "70",
+            price: "12,990",
+            discount: "20",
             badgeText: "안심성분",
             isSoldOut: false,
-            image: "https://via.placeholder.com/300/e6f4ea/333?text=중국산없는상품",
-            detailImage: "https://via.placeholder.com/600x1200/ffefd5/333?text=원산지+재료+상세설명+이미지", // 없으면 ""
+            image: "https://via.placeholder.com/300/e6f4ea/333?text=블루베리잼사진",
+            
+            // 상세팝업에 띄울 '영양정보/원재료 표' 이미지 주소
+            detailImage: "https://via.placeholder.com/600x400/fff/333?text=원재료명+표+이미지", 
+            
             mainLink: "https://toss.im",
-            compareLink: "https://coupang.com"
+            compareLink: "" // 팝업에서는 안 쓰이지만 구조 유지를 위해 둠
+        },
+        {
+            name: "국내산 100% 무첨가 고구마 말랭이 500g",
+            category: "과자/간식",
+            additive: "무첨가",
+            isDomesticOnly: true, // 국산만 보기 필터 켰을 때 노출됨
+            
+            originText: "국내산 (고구마 100%)",
+            
+            platform: "토스",
+            retailPrice: "20,000",
+            price: "9,900",
+            discount: "50",
+            badgeText: "특가",
+            isSoldOut: false,
+            image: "https://via.placeholder.com/300/e6f4ea/333?text=고구마말랭이사진",
+            detailImage: "https://via.placeholder.com/600x400/fff/333?text=고구마+상세+표",
+            mainLink: "https://toss.im",
+            compareLink: ""
         }
     ];
 
@@ -266,7 +362,6 @@
 
         filtered.forEach(p => {
             const card = document.createElement('a');
-            // 일반 상품은 클릭 시 바로 제품 링크로 이동 (원상복구)
             card.href = p.mainLink;
             card.target = '_blank';
             card.className = `card ${p.isSoldOut ? 'sold-out' : ''}`;
@@ -304,18 +399,16 @@
         renderMainProducts();
     });
 
-    // --- NO 중국산 전용 모달창 (Joongfree 스타일) 로직 ---
-    let currentNoChinaCategory = '전체';
+
+    // --- NO 중국산 다중 필터 로직 ---
+    let filters = { category: '전체', additive: null, origin: null };
     let currentNoChinaFiltered = [];
 
     function openSearchModal() {
         document.getElementById('searchModal').style.display = 'flex';
         renderNoChinaProducts();
     }
-    
-    function closeSearchModal() {
-        document.getElementById('searchModal').style.display = 'none';
-    }
+    function closeSearchModal() { document.getElementById('searchModal').style.display = 'none'; }
 
     function renderNoChinaProducts() {
         const grid = document.getElementById('noChinaProductGrid');
@@ -323,7 +416,10 @@
         grid.querySelectorAll('.card').forEach(c => c.remove());
 
         currentNoChinaFiltered = noChinaProducts.filter(p => {
-            return currentNoChinaCategory === '전체' || p.category === currentNoChinaCategory;
+            const matchCat = filters.category === '전체' || p.category === filters.category;
+            const matchAdd = !filters.additive || p.additive === filters.additive;
+            const matchOrg = !filters.origin || (filters.origin === '국산만' && p.isDomesticOnly === true);
+            return matchCat && matchAdd && matchOrg;
         });
 
         emptyMsg.style.display = currentNoChinaFiltered.length === 0 ? 'block' : 'none';
@@ -331,50 +427,61 @@
         currentNoChinaFiltered.forEach((p, index) => {
             const card = document.createElement('div');
             card.className = `card ${p.isSoldOut ? 'sold-out' : ''}`;
-
             let badgesHtml = p.badgeText ? `<span class="badge badge-low">${p.badgeText}</span>` : '';
             if(p.isSoldOut) badgesHtml += `<span class="badge badge-soldout">품절</span>`;
-            let discountHtml = p.discount ? `<span class="p-discount">${p.discount}%</span>` : '';
-            let retailHtml = p.retailPrice ? `<div class="p-retail">정상가 ${p.retailPrice}원</div>` : '';
-
-            // NO 중국산 상품은 클릭 시 상세 팝업(이중 모달) 띄움
+            
             card.innerHTML = `
                 <div class="img-box" onclick="openDetailModal(${index})"><img src="${p.image}"><div class="badge-container">${badgesHtml}</div></div>
                 <div class="info">
-                    <span class="platform-tag">${p.platform}</span><div class="p-name">${p.name}</div>${retailHtml}
-                    <div class="price-row">${discountHtml}<span class="p-price">${p.price}원</span></div>
-                    <button class="btn-buy" ${p.isSoldOut ? 'disabled' : ''} onclick="openDetailModal(${index})">상세 성분보기 🔍</button>
+                    <span class="platform-tag">${p.platform}</span><div class="p-name">${p.name}</div>
+                    <div class="price-row"><span class="p-discount">${p.discount}%</span><span class="p-price">${p.price}원</span></div>
+                    <button class="btn-buy" ${p.isSoldOut ? 'disabled' : ''} onclick="openDetailModal(${index})" style="background:#22c55e;">상세 정보 확인 🔍</button>
                 </div>
             `;
             grid.appendChild(card);
         });
     }
 
+    // 필터 버튼 클릭 이벤트 처리
     document.querySelectorAll('#noChinaSidebar .sm-cat-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
-            document.querySelectorAll('#noChinaSidebar .sm-cat-btn').forEach(b => b.classList.remove('active'));
-            e.target.classList.add('active');
-            currentNoChinaCategory = e.target.getAttribute('data-category');
+            const type = e.target.getAttribute('data-filter-type');
+            const val = e.target.getAttribute('data-value');
+
+            if(type === 'category') {
+                document.querySelectorAll('.sm-cat-btn[data-filter-type="category"]').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                filters.category = val;
+            } else {
+                // 토글 로직 (이미 활성화된 걸 누르면 해제)
+                if(e.target.classList.contains('active')) {
+                    e.target.classList.remove('active');
+                    filters[type] = null;
+                } else {
+                    document.querySelectorAll(`.sm-cat-btn[data-filter-type="${type}"]`).forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    filters[type] = val;
+                }
+            }
             renderNoChinaProducts();
         });
     });
 
-    // --- 상세 팝업창(원산지 모달) 로직 ---
+    // --- 상세 팝업창(중프리 스타일) 로직 ---
     function openDetailModal(index) {
         const p = currentNoChinaFiltered[index];
         if(!p || p.isSoldOut) return;
         
         document.getElementById('detailModalTitle').innerText = p.name;
         document.getElementById('detailModalGoBtn').href = p.mainLink;
+        document.getElementById('detailModalOriginText').innerText = p.originText;
         document.getElementById('detailModalImage').src = p.detailImage ? p.detailImage : p.image;
+        
         document.getElementById('detailModal').style.display = 'flex';
     }
+    function closeDetailModal() { document.getElementById('detailModal').style.display = 'none'; }
 
-    function closeDetailModal(event) {
-        document.getElementById('detailModal').style.display = 'none';
-    }
 
-    // --- 공통 타이머 로직 ---
     function updateTimer() {
         const now = new Date();
         const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
@@ -384,7 +491,6 @@
         const s = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
         document.getElementById('countdown').innerText = `${h}:${m}:${s}`;
     }
-    
     setInterval(updateTimer, 1000);
     updateTimer();
     renderMainProducts();
