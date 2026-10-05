@@ -5,46 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>핫딜 실시간 특가몰</title>
     <style>
-        /* 기본 스타일 및 초기화 */
-        body { font-family: 'Apple SD Gothic Neo', -apple-system, sans-serif; background-color: #f5f5f7; margin: 0; padding: 0; color: #333; padding-bottom: 90px; /* 하단 카톡 버튼 공간 확보 */ }
-        
-        /* PC에서는 4개가 들어가야 하므로 넓이를 늘립니다 (최대 1000px) */
+        /* 기본 스타일 */
+        body { font-family: 'Apple SD Gothic Neo', -apple-system, sans-serif; background-color: #f5f5f7; margin: 0; padding: 0; color: #333; padding-bottom: 90px; }
         .container { max-width: 1000px; margin: 0 auto; background: #ffffff; min-height: 100vh; box-shadow: 0 0 15px rgba(0,0,0,0.05); }
         
-        /* 1. 최상단 대가성 문구 */
+        /* 최상단 대가성 문구 */
         .disclosure { text-align: center; font-size: 11px; color: #666; padding: 10px; background: #fafafa; border-bottom: 2px solid #ff3b30; word-break: keep-all; }
         
-        /* 상단 퀵 링크 버튼 */
-        .quick-links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; background: #ffffff; }
+        /* 퀵 링크 버튼 */
+        .quick-links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 15px 15px 15px; background: #ffffff; }
         .btn-quick { padding: 12px; text-align: center; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none; color: #111; display: flex; align-items: center; justify-content: center; gap: 5px; border: 2px solid #111; }
         .btn-gold { background: #ffdb4d; border-color: #ffdb4d; }
         .btn-fresh { background: #e6f4ea; border-color: #e6f4ea; color: #137333; }
         
-        /* 타임딜 타이머 바 */
+        /* 타이머 바 */
         .timer-bar { background: #3b82f6; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 15px; margin: 0 15px; border-radius: 8px; }
         .timer-btn { background: white; color: #3b82f6; padding: 5px 12px; border-radius: 20px; font-size: 12px; text-decoration: none; font-weight: 800; }
         
-    
-        /* 검색창 */
+        /* 검색 및 탭 */
         .search-container { padding: 15px; background: white; position: sticky; top: 0; z-index: 10; }
         .search-box { width: 100%; padding: 12px 15px; border: 1.5px solid #ff3b30; border-radius: 8px; font-size: 14px; box-sizing: border-box; outline: none; }
-        
-        /* 카테고리 탭 */
         .tabs { display: flex; gap: 8px; padding: 0 15px 15px 15px; overflow-x: auto; background: white; border-bottom: 1px solid #f0f0f0; }
         .tabs::-webkit-scrollbar { display: none; }
         .tab-btn { padding: 8px 16px; border: 1px solid #ddd; border-radius: 20px; font-size: 13px; background: white; cursor: pointer; white-space: nowrap; font-weight: 500; }
         .tab-btn.active { background: #111; color: white; border-color: #111; }
 
-        /* 2. 상품 그리드 (PC 4열, 모바일 2열 배치) */
+        /* 상품 그리드 */
         .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 15px; }
-        
-        /* 모바일 화면 (너비 768px 이하)일 때 2열로 자동 변경 */
         @media (max-width: 768px) {
             .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 10px; }
         }
 
         .card { background: white; border: 1px solid #eee; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
-        .img-box { width: 100%; aspect-ratio: 1; background: #f9f9f9; position: relative; }
+        
+        /* 이미지 박스에 마우스 올리면 클릭 표시 */
+        .img-box { width: 100%; aspect-ratio: 1; background: #f9f9f9; position: relative; cursor: pointer; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
         
         .badge-container { position: absolute; bottom: 8px; left: 8px; display: flex; gap: 5px; }
@@ -55,94 +50,96 @@
         .info { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; }
         .platform-tag { display: inline-block; font-size: 10px; padding: 2px 6px; background: #f0f0f0; color: #666; border-radius: 4px; margin-bottom: 6px; align-self: flex-start; }
         .p-name { font-size: 13px; font-weight: 600; line-height: 1.4; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 36px; }
-        
         .p-retail { font-size: 11px; color: #999; text-decoration: line-through; margin-bottom: 2px; }
         .price-row { display: flex; align-items: baseline; gap: 5px; margin-bottom: 12px; }
         .p-discount { color: #ff3b30; font-weight: bold; font-size: 15px; }
         .p-price { font-weight: 800; font-size: 16px; }
         
-        /* 3. 구매 버튼 및 쿠팡 비교 링크 */
         .btn-buy { background: #ff3b30; color: white; text-align: center; padding: 12px; border-radius: 6px; font-size: 14px; font-weight: bold; display: block; text-decoration: none; border: none; width: 100%; cursor: pointer; margin-top: auto; }
         .btn-buy:active { background: #d62828; }
         .btn-compare { display: block; text-align: center; font-size: 12px; color: #555; text-decoration: none; margin-top: 8px; font-weight: 500; }
-        .btn-compare:hover { text-decoration: underline; }
         
         .card.sold-out .img-box img { opacity: 0.4; }
         .card.sold-out .btn-buy { background: #ddd; color: #888; cursor: not-allowed; }
-        
         #empty-msg { text-align: center; padding: 40px 20px; color: #888; font-size: 14px; grid-column: 1 / -1; display: none; }
 
-        /* 4. 하단 고정 카톡 채팅방 버튼 */
-        .floating-chat { 
-            position: fixed; 
-            bottom: 20px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            width: 90%; 
-            max-width: 400px; 
-            background-color: #fee500; 
-            color: #181600; 
-            text-align: center; 
-            padding: 16px; 
-            border-radius: 50px; 
-            font-weight: 900; 
-            font-size: 15px; 
-            text-decoration: none; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
-            z-index: 1000; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 8px; 
-        }
-        .floating-chat:active { transform: translateX(-50%) scale(0.98); }
+        /* 하단 고정 카톡 버튼 */
+        .floating-chat { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background-color: #fee500; color: #181600; text-align: center; padding: 16px; border-radius: 50px; font-weight: 900; font-size: 15px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 1000; }
+
+        /* 팝업(모달) 창 스타일 */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; display: none; align-items: center; justify-content: center; }
+        .modal-content { background: white; width: 90%; max-width: 400px; border-radius: 16px; padding: 25px 20px; position: relative; display: flex; flex-direction: column; }
+        .modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; color: #999; }
+        .modal-title { font-size: 16px; font-weight: bold; margin-bottom: 15px; line-height: 1.4; padding-right: 20px; }
+        .modal-body { max-height: 50vh; overflow-y: auto; margin-bottom: 20px; border-radius: 8px; }
+        .modal-body img { width: 100%; display: block; }
+        
+        .modal-btn-go { background: #3b82f6; color: white; text-align: center; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; text-decoration: none; display: block; }
+        .modal-btn-go:active { background: #2563eb; }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <div class="disclosure">📢 쿠팡, 토스, 무신사, 오늘의집, 네이버를 통한 구매시 수수료를 받습니다. 구매 가격은 동일합니다.</div>
     
-    <!-- 1. 최상단 대가성 문구 -->
-    <div class="disclosure">
-        📢 쿠팡, 토스, 무신사, 오늘의집, 네이버를 통한 구매시 수수료를 받습니다. 구매 가격은 동일합니다.
-    </div>
-
-    <!-- 퀵 링크 버튼 (본인 제휴 링크로 변경) -->
+    <!-- 🔥 새로 추가된 중국산 아웃 배너 (여기 배치됨) 🔥 -->
+    <a href="/deallog" style="display: block; margin: 15px; text-decoration: none;">
+        <div style="background-color: #ffeaea; border: 2px solid #ff3b30; border-radius: 12px; padding: 15px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <div style="font-size: 32px; position: relative; line-height: 1;">
+                🇨🇳
+                <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 40px; color: #ff3b30; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">❌</span>
+            </div>
+            <div style="text-align: left; color: #111;">
+                <div style="font-weight: 900; font-size: 16px; color: #d62828; margin-bottom: 2px;">NO 중국산! 국내산 특가 모음 🚀</div>
+                <div style="font-size: 13px; font-weight: 600; color: #555;">실시간 검증된 핫딜만 보러가기 ➔</div>
+            </div>
+        </div>
+    </a>
+    
+    <!-- 퀵 링크 버튼 -->
     <div class="quick-links">
         <a href="https://coupang.com" class="btn-quick btn-gold" target="_blank">🎁 골드박스 특가</a>
         <a href="https://coupang.com" class="btn-quick btn-fresh" target="_blank">🥬 오늘의 식재료</a>
     </div>
-
-    <!-- 타임딜 타이머 -->
+    
+    <!-- 타이머 바 -->
     <div class="timer-bar">
         <div>토스 타임딜 <span id="countdown">00:00:00</span></div>
         <a href="https://toss.im" class="timer-btn" target="_blank">특가 보러가기 ↗</a>
     </div>
     <br>
-
-    <!-- 검색창 -->
+    
+    <!-- 검색 및 탭 -->
     <div class="search-container">
         <input type="text" id="searchInput" class="search-box" placeholder="🔍 상품명이나 단어 일부로 검색">
     </div>
-
-    <!-- 카테고리 탭 -->
     <div class="tabs" id="categoryTabs">
         <button class="tab-btn active" data-category="전체">전체</button>
         <button class="tab-btn" data-category="토스">토스</button>
         <button class="tab-btn" data-category="쿠팡">쿠팡</button>
     </div>
-
-    <!-- 상품이 표시될 공간 (JS가 여기에 상품을 그려넣습니다) -->
+    
+    <!-- 상품 그리드 -->
     <div class="product-grid" id="productGrid">
         <div id="empty-msg">검색 결과가 없습니다.</div>
     </div>
-
 </div>
 
-<!-- 4. 하단 고정 카카오톡 오픈채팅방 버튼 (본인 톡방 링크로 변경) -->
-<a href="https://open.kakao.com/..." class="floating-chat" target="_blank">
-    💬 실시간 1분 품절 핫딜 알림방 입장하기
-</a>
+<!-- 하단 카카오톡 버튼 -->
+<a href="https://open.kakao.com/..." class="floating-chat" target="_blank">💬 실시간 1분 품절 핫딜 알림방 입장하기</a>
+
+<!-- 팝업(모달) 창 -->
+<div id="detailModal" class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <div id="modalTitle" class="modal-title">상품명 위치</div>
+        <div class="modal-body">
+            <img id="modalImage" src="" alt="상세정보">
+        </div>
+        <a id="modalGoBtn" href="#" class="modal-btn-go" target="_blank">🛒 제품 바로가기</a>
+    </div>
+</div>
 
 <!-- ========================================== -->
 <!-- 👇 매일 여기부터 수정하세요 (상품 데이터 관리) 👇 -->
@@ -152,26 +149,15 @@
         {
             name: "이롬 국내산 약콩 무가당 두유 190ml 16개",
             platform: "토스",            
-            retailPrice: "16,800",       // 정가 (취소선 표시됨)
-            price: "4,990",              // 실제 판매가
-            discount: "70",              // 할인율 숫자만
+            retailPrice: "16,800",       
+            price: "4,990",              
+            discount: "70",              
             badgeText: "기록상 최저가",  
-            isSoldOut: false,            // 품절이면 true 로 변경
-            image: "https://via.placeholder.com/300/f5f5f5/888?text=상품이미지1",
-            mainLink: "https://toss.im", // 메인 빨간 버튼 링크 (주로 토스)
-            compareLink: "https://coupang.com" // 아래 텍스트 비교 링크 (주로 쿠팡)
-        },
-        {
-            name: "예진원 국내산 ABC주스 80ml 35개",
-            platform: "토스",
-            retailPrice: "19,900",
-            price: "5,990",
-            discount: "70",
-            badgeText: "기록상 최저가",
-            isSoldOut: false,
-            image: "https://via.placeholder.com/300/f5f5f5/888?text=상품이미지2",
-            mainLink: "https://toss.im",
-            compareLink: "https://coupang.com"
+            isSoldOut: false,            
+            image: "https://via.placeholder.com/300/f5f5f5/888?text=메인상품사진",
+            detailImage: "https://via.placeholder.com/600x1200/ffefd5/333?text=원산지+재료+상세설명+이미지", 
+            mainLink: "https://toss.im", 
+            compareLink: "https://coupang.com" 
         },
         {
             name: "한우물 햄야채 볶음밥 210g 10개",
@@ -181,19 +167,8 @@
             discount: "62",
             badgeText: "기록상 최저가",
             isSoldOut: false,
-            image: "https://via.placeholder.com/300/f5f5f5/888?text=상품이미지3",
-            mainLink: "https://toss.im",
-            compareLink: "https://coupang.com"
-        },
-        {
-            name: "슬림떡볶이 로제맛 230g 4개",
-            platform: "토스",
-            retailPrice: "15,600",
-            price: "5,530",
-            discount: "65",
-            badgeText: "",
-            isSoldOut: true, // 품절 상태 예시
-            image: "https://via.placeholder.com/300/f5f5f5/888?text=상품이미지4",
+            image: "https://via.placeholder.com/300/f5f5f5/888?text=메인상품사진",
+            detailImage: "", 
             mainLink: "https://toss.im",
             compareLink: "https://coupang.com"
         }
@@ -207,8 +182,9 @@
     const emptyMsg = document.getElementById('empty-msg');
     let currentCategory = '전체';
     let currentSearch = '';
+    
+    let currentFiltered = []; 
 
-    // 오늘 날짜 구하기 (2026.10.02 가격 확인 문구용)
     const today = new Date();
     const dateString = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
 
@@ -216,15 +192,15 @@
         const cards = grid.querySelectorAll('.card');
         cards.forEach(card => card.remove());
 
-        const filtered = products.filter(p => {
+        currentFiltered = products.filter(p => {
             const matchCategory = currentCategory === '전체' || p.platform === currentCategory;
             const matchSearch = p.name.replace(/\s+/g, '').includes(currentSearch.replace(/\s+/g, ''));
             return matchCategory && matchSearch;
         });
 
-        emptyMsg.style.display = filtered.length === 0 ? 'block' : 'none';
+        emptyMsg.style.display = currentFiltered.length === 0 ? 'block' : 'none';
 
-        filtered.forEach(p => {
+        currentFiltered.forEach((p, index) => {
             const card = document.createElement('div');
             card.className = `card ${p.isSoldOut ? 'sold-out' : ''}`;
 
@@ -236,7 +212,7 @@
             let retailHtml = p.retailPrice ? `<div class="p-retail">정상가 ${p.retailPrice}원</div>` : '';
 
             card.innerHTML = `
-                <div class="img-box">
+                <div class="img-box" onclick="openModal(${index})">
                     <img src="${p.image}" alt="${p.name}">
                     <div class="badge-container">${badgesHtml}</div>
                 </div>
@@ -250,8 +226,8 @@
                     </div>
                     <div style="font-size: 10px; color: #888; margin-bottom: 10px;">${dateString} 가격 확인</div>
                     
-                    <button class="btn-buy" ${p.isSoldOut ? 'disabled' : ''} onclick="window.open('${p.mainLink}', '_blank')">
-                        최저가 구매 ↗
+                    <button class="btn-buy" ${p.isSoldOut ? 'disabled' : ''} onclick="openModal(${index})">
+                        상세보기 및 구매 ↗
                     </button>
                     <a href="${p.compareLink}" class="btn-compare" target="_blank">
                         쿠팡에서 보기 ⇲
@@ -260,6 +236,23 @@
             `;
             grid.appendChild(card);
         });
+    }
+
+    function openModal(index) {
+        const p = currentFiltered[index];
+        if(!p || p.isSoldOut) return; 
+
+        document.getElementById('modalTitle').innerText = p.name;
+        document.getElementById('modalGoBtn').href = p.mainLink;
+        
+        const imgElement = document.getElementById('modalImage');
+        imgElement.src = p.detailImage ? p.detailImage : p.image;
+
+        document.getElementById('detailModal').style.display = 'flex';
+    }
+
+    function closeModal(event) {
+        document.getElementById('detailModal').style.display = 'none';
     }
 
     document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -280,18 +273,15 @@
         const now = new Date();
         const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
         const diff = tomorrow - now;
-
         const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
         const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
         const s = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
-
         document.getElementById('countdown').innerText = `${h}:${m}:${s}`;
     }
     
     setInterval(updateTimer, 1000);
     updateTimer();
     renderProducts();
-
 </script>
 </body>
 </html>
